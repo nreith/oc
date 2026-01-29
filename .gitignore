@@ -1,0 +1,56 @@
+# OpenCode bookkeeping
+.sisyphus/
+
+# Node.js / npm
+node_modules/
+npm-debug.log*
+.yarn*
+package-lock.json
+yarn.lock
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor / IDE directories
+.idea/
+.vscode/
+*.code-workspace
+
+# Build / distribution artifacts
+build/
+Dist/
+Dist/**
+.dist/
+.out/
+.out/**
+*.js.map
+*.css.map
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# Python virtual environments
+venv/
+.env/
+__pycache__/
+*.py[cod]
+
+# Logs and diagnostics
+*.log
+*.pid
+*.seed
+
+# Test coverage / reports
+coverage/
+.nyc_output/
+*.lcov
+
+# Miscellaneous
+*.bak
+*.orig
+*.rej
