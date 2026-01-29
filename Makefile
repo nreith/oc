@@ -25,9 +25,18 @@ oh-my-opencode: ## Install oh-my-opencode
 	@echo "Installing oh-my-opencode and dependencies"
 	@brew install npm
 	@npm install -g bun
-	@bunx oh-my-opencode install --no-tui --skip-auth --openai=no --gemini=no --copilot=no --opencode-zen=no --zai-coding-plan=no
+	@bunx oh-my-opencode install --no-tui --skip-auth --openai=no --gemini=no --claude=no \
+		--copilot=no --opencode-zen=no --zai-coding-plan=no
 	@brew install ast-grep gh gopls pyright rust-analyzer typescript-language-server
 	@cp -f oh-my-opencode.json ~/.config/opencode/oh-my-opencode.json
+	@cp -f omo.json ~/.config/opencode/omo.json
+	@for file in ~/.bashrc ~/.zshrc ~/.profile; do \
+		if [ -f "$$file" ]; then \
+			if ! grep -qF 'alias omo="opencode --config ~/.config/opencode/omo.json"' "$$file"; then \
+				echo "alias omo='opencode --config ~/.config/opencode/omo.json'" >> "$$file"; \
+			fi \
+		fi \
+	done
 	@sed -i 's|^[[:space:]]*//[[:space:]]*"plugin":|"plugin":|' ~/.config/opencode/opencode.json
 	@echo "Done! If you ever want to disable, comment out this line in your ~/.config/opencode/opencode.json:"
 	@echo '    "plugin": [ "oh-my-opencode@latest" ],'

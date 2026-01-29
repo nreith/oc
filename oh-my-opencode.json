@@ -1,39 +1,50 @@
-// https://github.com/code-yeongyu/oh-my-opencode/blob/dev/docs/configurations.md
-// Modifications below, to use on-prem models
 {
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
   "agents": {
-    "Sisyphus": {
+    "sisyphus": {
       "model": "custom/gpt-oss-120b",
       "reasoning": true,
       "tool_call": true,
-      "variant": "high", // Sets gpt-oss to high reasoning effort
-      "maxTokens": 16384
+      "variant": "high",
+      "maxTokens": 16384,
+      "stream": false
     },
     "oracle": {
       "model": "custom/gpt-oss-120b",
       "reasoning": true,
-      "reasoningEffort": "xhigh" // Maximum logic for debugging
+      "reasoningEffort": "xhigh",
+      "textVerbosity": "high", // Added for more detailed logic
+      "stream": false
     },
     "librarian": {
       "model": "custom/mistral-small-24b",
       "context": 114688,
-      "tool_call": true // Enabled to allow the librarian to use 'ls' and 'cat' tools
+      "tool_call": true,
+      "stream": false
     },
     "executor": {
       "model": "custom/llama-3-3-70b-instruct",
       "tool_call": true,
-      "reasoning": true // Llama 3.3 supports reasoning-lite for task planning
+      "reasoning": true,
+      "permission": { "bash": "allow" }, // Optional: reduce prompts for the executor
+      "stream": false
     },
     "explore": {
       "model": "custom/codestral-22b",
-      "tool_call": true
+      "tool_call": true,
+      "stream": false
     },
     "frontend_engineer": {
       "model": "custom/pixtral-12b",
       "context": 114688,
-      "tool_call": true
+      "tool_call": true,
+      "stream": false
     }
+  },
+  "categories": {
+    "quick": { "model": "custom/llama-3-2-3b-instruct", "stream": false },
+    "visual-engineering": { "model": "custom/pixtral-12b", "stream": false },
+    "logic": { "model": "custom/gpt-oss-120b", "variant": "high", "stream": false }
   },
   "browser_automation_engine": "custom/pixtral-12b",
   "tmux": {
