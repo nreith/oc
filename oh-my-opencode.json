@@ -1,0 +1,43 @@
+// https://github.com/code-yeongyu/oh-my-opencode/blob/dev/docs/configurations.md
+// Modifications below, to use on-prem models
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+  "agents": {
+    "Sisyphus": {
+      "model": "custom/gpt-oss-120b",
+      "reasoning": true,
+      "tool_call": true,
+      "variant": "high", // Sets gpt-oss to high reasoning effort
+      "maxTokens": 16384
+    },
+    "oracle": {
+      "model": "custom/gpt-oss-120b",
+      "reasoning": true,
+      "reasoningEffort": "xhigh" // Maximum logic for debugging
+    },
+    "librarian": {
+      "model": "custom/mistral-small-24b",
+      "context": 114688,
+      "tool_call": true // Enabled to allow the librarian to use 'ls' and 'cat' tools
+    },
+    "executor": {
+      "model": "custom/llama-3-3-70b-instruct",
+      "tool_call": true,
+      "reasoning": true // Llama 3.3 supports reasoning-lite for task planning
+    },
+    "explore": {
+      "model": "custom/codestral-22b",
+      "tool_call": true
+    },
+    "frontend_engineer": {
+      "model": "custom/pixtral-12b",
+      "context": 114688,
+      "tool_call": true
+    }
+  },
+  "browser_automation_engine": "custom/pixtral-12b",
+  "tmux": {
+    "enabled": true,
+    "layout": "main-vertical"
+  }
+}
