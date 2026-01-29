@@ -6,6 +6,8 @@ node_modules/
 npm-debug.log*
 .yarn*
 package-lock.json
+bun.lock
+package.json
 yarn.lock
 
 # OS generated files
@@ -54,3 +56,29 @@ coverage/
 *.bak
 *.orig
 *.rej
+.sisyphus/
+
+# Added comprehensive ignore patterns
+
+# OS/editor/temp files
+.eslintcache
+.cache/
+.tmp/
+.npm/
+.yarn/cache/
+.yarn/unplugged/
+.pnp.*
+.parcel-cache/
+.next/
+.turbo/
+.vscode-test/
+.husky/
+
+# Secret files
+.env
+.env.*
+*.secret
+*.key
+*.pem
+*.crt
+*.cert
