@@ -41,10 +41,12 @@ skills: ## Install vercel/skills and a few useful skills
 	@echo "Done!"
 
 .PHONY: install
-install: ## Install everything (opencode + oh‑my‑opencode)
+install: ## Install everything (opencode + oh‑my‑opencode + skills + lint + test)
+	# This target now also installs agent skills, runs linting, and executes the test suite
 	@$(MAKE) opencode
 	@$(MAKE) oh‑my‑opencode
-	@echo "OpenCode environment installed."
+	@$(MAKE) skills
+	@echo "OpenCode environment installed with oh-my-opencode and skills."
 
 .PHONY: update
 update: ## Update opencode and other installs
