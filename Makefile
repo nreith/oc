@@ -32,6 +32,14 @@ oh-my-opencode: ## Install oh-my-opencode
 	@echo "Done! If you ever want to disable, comment out this line in your ~/.config/opencode/opencode.json:"
 	@echo '    "plugin": [ "oh-my-opencode@latest" ],'
 
+.PHONY: skills
+skills: ## Install vercel/skills and a few useful skills
+	@echo "Adding common agent-skills and agent-browser skills with vercel"
+	@npx skills add vercel-labs/agent-skills -g -a opencode -a claude-code -y
+	@npx skills add vercel-labs/agent-browser -g -a opencode -a claude-code -y
+	@npx agent-browser install --with-deps -y
+	@echo "Done!"
+
 .PHONY: install
 install: ## Install everything (opencode + oh‑my‑opencode)
 	@$(MAKE) opencode

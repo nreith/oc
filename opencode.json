@@ -12,12 +12,7 @@
   "autoupdate": false,
   "theme": "rosepine",
   "share": "disabled",
-  "permission": {
-    // all are allowed by default
-    // "webfetch": "allow",
-    // "bash": "ask",
-    // "edit": "allow"
-  },
+  "permission": { }, // All are allowed by default: https://opencode.ai/docs/tools/
   "model": "custom/gpt-oss-120b",
   "small_model": "custom/llama-3-2-3b-instruct",
   "enabled_providers": [ "custom" ],
@@ -120,7 +115,7 @@
   // --- MCP Servers (Strict Format) ---
   "mcp": {
     // 1. Brave Search (Web Search)
-    "brave-search": {
+    "brave": {
       "type": "local",
       "command": [ "npx", "-y", "@modelcontextprotocol/server-brave-search" ],
       "enabled": true,
