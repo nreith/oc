@@ -32,10 +32,10 @@ oh-my-opencode: ## Install oh-my-opencode
 	@echo "Done! If you ever want to disable, comment out this line in your ~/.config/opencode/opencode.json:"
 	@echo '    "plugin": [ "oh-my-opencode@latest" ],'
 
-.PHONY: install-opencode
-install-opencode: ## Install both opencode and oh‑my‑opencode
+.PHONY: install
+install: ## Install everything (opencode + oh‑my‑opencode)
 	@$(MAKE) opencode
-	@$(MAKE) oh-my-opencode
+	@$(MAKE) oh‑my‑opencode
 	@echo "OpenCode environment installed."
 
 .PHONY: update
@@ -60,7 +60,7 @@ lint: ## Run linters (placeholder)
 		echo "shellcheck not installed, skipping shell script lint"; \
 	fi
 	-@if command -v jq > /dev/null; then \
-		find . -type f -name "*.json" -exec jq . {} > /dev/null \; || echo "JSON lint errors found"; \
+		find . -type f -name "*.json" -exec jq -e . {} > /dev/null 2>/dev/null \; || echo "JSON lint errors found"; \
 	else \
 		echo "jq not installed, skipping JSON lint"; \
 	fi

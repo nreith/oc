@@ -15,7 +15,7 @@ This repository provides configuration files and helper scripts for **OpenCode**
 1. **Install dependencies**
 
    ```bash
-   make install-opencode
+   make install
    ```
 
    This installs OpenCode and Oh‑My‑OpenCode, along with required dependencies.
@@ -34,7 +34,7 @@ This repository provides configuration files and helper scripts for **OpenCode**
 
 ## Helper scripts and CLI commands
 
-- **`opencode`** – The primary OpenCode command installed by the `install-opencode` target.
+- **`opencode`** – The primary OpenCode command installed by the `install` target.
 - **`oh‑my‑opencode`** – Installs the Oh‑My‑OpenCode plugin and its dependencies.
 - **Manual commands** – You can invoke the OpenCode binary directly for advanced usage.
 
@@ -42,7 +42,7 @@ This repository provides configuration files and helper scripts for **OpenCode**
 
 | Target | Description |
 |--------|-------------|
-| `install-opencode` | Install OpenCode and Oh‑My‑OpenCode together |
+| `install` | Install OpenCode and Oh‑My‑OpenCode together |
 | `opencode` | Install OpenCode and set configuration |
 | `oh‑my‑opencode` | Install Oh‑My‑OpenCode and dependencies |
 | `update` | Update Homebrew and installed tools |
