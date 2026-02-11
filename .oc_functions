@@ -7,43 +7,38 @@ oc_plugin() {
 
     [[ ! -f "$file" ]] && echo "Error: Config not found at $file" && return 1
 
+    # Ensure jq is available for reliable JSON manipulation
+    if ! command -v jq > /dev/null; then
+        echo "Error: jq is required for oc_plugin but not installed."
+        return 1
+    fi
+
     case "$action" in
         add)
-            # 1. Check if it already exists to avoid duplicates
-            if grep -q "\"$plugin\"" "$file"; then
+            # Add the plugin if it's not already present
+            if jq -e --arg p "$plugin" '.plugin // [] | index($p)' "$file" > /dev/null; then
                 echo "Plugin '$plugin' is already enabled."
                 return 0
             fi
-
-            # 2. If the array is empty [ ], replace with ["plugin"]
-            #    If it has items [ "a" ], replace with ["plugin", "a"]
-            sed -i "/\"plugin\": \[/ s/\[/\[ \"$plugin\"/" "$file"
-
-            # 3. Fix formatting: if we added to an existing list, add a comma
-            sed -i "/\"plugin\": \[/ s/\"$plugin\" \"/\"$plugin\", \"/" "$file"
+            jq --arg p "$plugin" '.plugin = ( (.plugin // []) + [$p] | unique )' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
             echo "Enabled $plugin"
             ;;
-
         remove)
-            # 1. Remove the plugin name
-            sed -i "/\"plugin\": \[/ s/\"$plugin\"//g" "$file"
-
-            # 2. Cleanup: Remove leading/trailing commas and extra spaces left behind
-            sed -i "/\"plugin\": \[/ {
-                s/, ,/,/g; 
-                s/\[ ,/\[ /g; 
-                s/, \]/ \]/g; 
-                s/\[  /\[ /g
-            }" "$file"
+            # Remove the plugin if it exists
+            if ! jq -e --arg p "$plugin" '.plugin // [] | index($p)' "$file" > /dev/null; then
+                echo "Plugin '$plugin' is not enabled."
+                return 0
+            fi
+            jq --arg p "$plugin" '.plugin = ( (.plugin // []) - [$p] )' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
             echo "Disabled $plugin"
             ;;
-
         *)
-            echo "Usage: edit_plugin [add|remove] [plugin-name]"
+            echo "Usage: oc_plugin [add|remove] [plugin-name]"
             return 1
             ;;
     esac
 }
+
 
 oc() {
     oc_plugin remove oh-my-opencode
