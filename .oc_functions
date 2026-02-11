@@ -1,0 +1,81 @@
+# OpenCode Bash Functions
+
+oc_plugin() {
+    local action=$1
+    local plugin=$2
+    local file="/home/nick/.config/opencode/opencode.json"
+
+    [[ ! -f "$file" ]] && echo "Error: Config not found at $file" && return 1
+
+    case "$action" in
+        add)
+            # 1. Check if it already exists to avoid duplicates
+            if grep -q "\"$plugin\"" "$file"; then
+                echo "Plugin '$plugin' is already enabled."
+                return 0
+            fi
+
+            # 2. If the array is empty [ ], replace with ["plugin"]
+            #    If it has items [ "a" ], replace with ["plugin", "a"]
+            sed -i "/\"plugin\": \[/ s/\[/\[ \"$plugin\"/" "$file"
+
+            # 3. Fix formatting: if we added to an existing list, add a comma
+            sed -i "/\"plugin\": \[/ s/\"$plugin\" \"/\"$plugin\", \"/" "$file"
+            echo "Enabled $plugin"
+            ;;
+
+        remove)
+            # 1. Remove the plugin name
+            sed -i "/\"plugin\": \[/ s/\"$plugin\"//g" "$file"
+
+            # 2. Cleanup: Remove leading/trailing commas and extra spaces left behind
+            sed -i "/\"plugin\": \[/ {
+                s/, ,/,/g; 
+                s/\[ ,/\[ /g; 
+                s/, \]/ \]/g; 
+                s/\[  /\[ /g
+            }" "$file"
+            echo "Disabled $plugin"
+            ;;
+
+        *)
+            echo "Usage: edit_plugin [add|remove] [plugin-name]"
+            return 1
+            ;;
+    esac
+}
+
+oc() {
+    oc_plugin remove oh-my-opencode
+    opencode
+}
+
+omo() {
+    oc_plugin add oh-my-opencode
+    local base_name=$(basename "$PWD")
+    local path_hash=$(echo "$PWD" | md5sum | cut -c1-4)
+    local session_name="${base_name}-${path_hash}"
+
+    # Find available port
+    local port=4096
+    while [ $port -lt 5096 ]; do
+        if ! lsof -i :$port >/dev/null 2>&1; then
+            break
+        fi
+        port=$((port + 1))
+    done
+
+    export OPENCODE_PORT=$port
+
+    if [ -n "$TMUX" ]; then
+        opencode --port $port "$@"
+    else
+        local oc_cmd="OPENCODE_PORT=$port opencode --port $port $*; exec $SHELL"
+        if tmux has-session -t "$session_name" 2>/dev/null; then
+            tmux new-window -t "$session_name" -c "$PWD" "$oc_cmd"
+            tmux attach-session -t "$session_name"
+        else
+            tmux new-session -s "$session_name" -c "$PWD" "$oc_cmd"
+        fi
+    fi
+}

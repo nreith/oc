@@ -82,3 +82,7 @@ coverage/
 *.pem
 *.crt
 *.cert
+# OpenCode user config
+/.config/opencode/
+# Snyk Security Extension - AI Rules (auto-generated)
+.github/instructions/snyk_rules.instructions.md

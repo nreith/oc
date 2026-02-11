@@ -12,17 +12,23 @@ This repository provides configuration files and helper scripts for **OpenCode**
 
 ## Setup workflow
 
-1. **Install dependencies**
+1. **Install dependencies and tools**
 
    ```bash
    make install
    ```
 
-   This installs OpenCode and Oh‑My‑OpenCode, along with required dependencies.
+   This target runs the following sub‑targets:
+   - `opencode` – installs the OpenCode CLI, copies `opencode.json` to `~/.config/opencode/`, and installs the helper functions from `.oc_functions`.
+   - `oh-my-opencode` – installs Oh‑My‑OpenCode, Node.js, Bun, and a set of language servers, then registers the `oh‑my‑opencode` plugin.
+   - `skills` – installs Vercel agent‑skills and the `agent-browser` skill.
+   - (Later) runs linting and the placeholder test suite.
 
 2. **Configure the tools**
 
-   The installation targets copy the necessary configuration files into `~/.config/opencode` and set up any required environment variables.
+   The installation copies required configuration files into `~/.config/opencode` and appends `source ~/.oc_functions` to your shell startup files (`~/.bashrc`, `~/.zshrc`, `~/.profile`).
+
+   > **Note:** Ensure you export `OPENAI_API_KEY` and `OPENAI_BASE_URL` in your environment (e.g., add them to `~/.bashrc`).
 
 3. **Start using OpenCode**
 
@@ -32,25 +38,49 @@ This repository provides configuration files and helper scripts for **OpenCode**
 
    This launches the OpenCode CLI in the current directory.
 
-## Helper scripts and CLI commands
+## Bash Functions (`.oc_functions`)
 
-- **`opencode`** – The primary OpenCode command installed by the `install` target.
-- **`oh‑my‑opencode`** – Installs the Oh‑My‑OpenCode plugin and its dependencies.
-- **Manual commands** – You can invoke the OpenCode binary directly for advanced usage.
+The repository ships a small library of convenience functions that are sourced automatically after running `make opencode`.
 
-## Available commands
+- `oc_plugin <add|remove> <plugin-name>` – Adds or removes a plugin name from the `plugin` array in `~/.config/opencode/opencode.json`.
+- `oc` – Runs `opencode` after ensuring the `oh‑my‑opencode` plugin is disabled.
+- `omo` – Enables the `oh‑my‑opencode` plugin, selects an available port, and starts an OpenCode session inside a TMUX window (or directly if TMUX is not running). It also sets `OPENCODE_PORT` for the session.
+
+These helpers simplify switching between a plain OpenCode environment and the feature‑rich Oh‑My‑OpenCode setup.
+
+## Makefile Targets
 
 | Target | Description |
 |--------|-------------|
-| `install` | Install OpenCode and Oh‑My‑OpenCode together |
-| `opencode` | Install OpenCode and set configuration |
-| `oh‑my‑opencode` | Install Oh‑My‑OpenCode and dependencies |
-| `update` | Update Homebrew and installed tools |
-| `test` | Placeholder for test suite |
-| `lint` | Run linters (ShellCheck, jq, markdownlint) |
-| `docs` | Generate HTML documentation from markdown |
-| `clean` | Placeholder for cleaning generated files |
-| `help` | Show list of make targets |
+| `help` | Show a list of available make targets. |
+| `opencode` | Install OpenCode, copy configuration, and install the `.oc_functions` helpers. |
+| `oh-my-opencode` | Install Oh‑My‑OpenCode, Node.js, Bun, language servers, and register the Oh‑My‑OpenCode plugin. |
+| `skills` | Install Vercel agent‑skills and the `agent-browser` skill. |
+| `install` | Run `opencode`, `oh‑my‑opencode`, and `skills` together (full environment setup). |
+| `update` | Update Homebrew and upgrade installed formulas. |
+| `test` | Placeholder for running the test suite. |
+| `docs` | Generate HTML documentation from `README.md` using `pandoc`. |
+| `lint` | Run optional linters: ShellCheck, `jq` for JSON, and `markdownlint`. |
+| `clean` | Remove generated files such as `node_modules`, lock files, `.sisyphus`, and build artifacts. |
+| `all` | Default no‑op target. |
+
+## Generating Documentation
+
+```bash
+make docs   # Produces README.html from the markdown source
+```
+
+## Linting
+
+```bash
+make lint   # Runs shellcheck, jq, and markdownlint if they are installed
+```
+
+## Cleaning Up
+
+```bash
+make clean  # Deletes generated files and directories
+```
 
 ## Contributing
 

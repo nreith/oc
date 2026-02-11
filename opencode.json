@@ -16,7 +16,7 @@
   "model": "custom/gpt-oss-120b",
   "small_model": "custom/llama-3-2-3b-instruct",
   "enabled_providers": [ "custom" ],
-  // "plugin": [ "oh-my-opencode@latest" ],
+  "plugin": [ ],
   "provider": {
     "custom": {
       "npm": "@ai-sdk/openai-compatible",

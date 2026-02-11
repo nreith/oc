@@ -1,0 +1,8 @@
+# OpenCode ignore file
+# Ignore generated files and directories
+node_modules/
+.tmp/
+*.log
+*.pid
+# Ignore user configuration
+/.config/opencode/

@@ -17,8 +17,19 @@ opencode: ## Install opencode and set configuration
 	@brew install opencode
 	@mkdir -p ~/.config/opencode
 	@cp -f opencode.json ~/.config/opencode/opencode.json
+	@echo "Creating useful oc functions such as 'oc_plugin add plugin-name' or 'oc_plugin remove plugin-name"
+	@echo "    which will add or remove a plugin in the plugins section of the ~/.config/opencode/opencode.json using sed."
+	@cp -f .oc_functions ~/.oc_functions
+	@for file in ~/.bashrc ~/.zshrc ~/.profile; do \
+		if [ -f "$$file" ]; then \
+			if ! grep -qF 'source ~/.oc_functions' "$$file"; then \
+				echo 'source ~/.oc_functions' >> "$$file"; \
+			fi; \
+		fi; \
+	done
 	@echo "Done! Be sure you export your 'OPENAI_API_KEY' and 'OPENAI_BASE_URL' in your environment (Add to ~/.bashrc or similar)"
-	@echo "Then run 'opencode' to launch opencode in a folder of your choosing."
+	@echo "Then run 'opencode' to launch opencode in a folder of your choosing, with all enabled plugins."
+	@echo "Or run 'oc' to run opencode specifically without oh-my-opencode installed, to have only default build/plan agents and behavior."
 
 .PHONY: oh-my-opencode
 oh-my-opencode: ## Install oh-my-opencode
@@ -29,32 +40,24 @@ oh-my-opencode: ## Install oh-my-opencode
 		--copilot=no --opencode-zen=no --zai-coding-plan=no
 	@brew install ast-grep gh gopls pyright rust-analyzer typescript-language-server
 	@cp -f oh-my-opencode.json ~/.config/opencode/oh-my-opencode.json
-	@cp -f omo.json ~/.config/opencode/omo.json
-	@for file in ~/.bashrc ~/.zshrc ~/.profile; do \
-		if [ -f "$$file" ]; then \
-			if ! grep -qF 'alias omo="opencode --config ~/.config/opencode/omo.json"' "$$file"; then \
-				echo "alias omo='opencode --config ~/.config/opencode/omo.json'" >> "$$file"; \
-			fi \
-		fi \
-	done
-	@sed -i 's|^[[:space:]]*//[[:space:]]*"plugin":|"plugin":|' ~/.config/opencode/opencode.json
-	@echo "Done! If you ever want to disable, comment out this line in your ~/.config/opencode/opencode.json:"
-	@echo '    "plugin": [ "oh-my-opencode@latest" ],'
+	source ~/.oc_functions; oc_plugin add oh-my-opencode
+	@echo "Done! Use the 'omo' function / shortcut to launch opencode with oh-my-opencode enabled."
 
 .PHONY: skills
 skills: ## Install vercel/skills and a few useful skills
 	@echo "Adding common agent-skills and agent-browser skills with vercel"
-	@npx skills add vercel-labs/agent-skills -g -a opencode -a claude-code -y
-	@npx skills add vercel-labs/agent-browser -g -a opencode -a claude-code -y
-	@npx agent-browser install --with-deps -y
+	@npx -y skills add vercel-labs/agent-skills -g -a opencode -a claude-code -y
+	@npx -y skills add vercel-labs/agent-browser -g -a opencode -a claude-code -y
+	@npx -y agent-browser install --with-deps -y
 	@echo "Done!"
 
+# May need more work on this skills thing above for installing playwright
+# @npm install @playwrite/test
+# 	@npx playwrite install
+
 .PHONY: install
-install: ## Install everything (opencode + oh‑my‑opencode + skills + lint + test)
+install: opencode oh-my-opencode skills ## Install everything (opencode + oh‑my‑opencode + skills + lint + test)
 	# This target now also installs agent skills, runs linting, and executes the test suite
-	@$(MAKE) opencode
-	@$(MAKE) oh‑my‑opencode
-	@$(MAKE) skills
 	@echo "OpenCode environment installed with oh-my-opencode and skills."
 
 .PHONY: update
@@ -92,5 +95,7 @@ lint: ## Run linters (placeholder)
 .PHONY: all clean
 all: ## Default target (no-op)
 	@true
-clean: ## Clean target (no-op)
-	@true
+clean: ## Clean generated repository files (node_modules, lock files, build artifacts, .sisyphus, etc.)
+	@rm -rf node_modules bun.lock package-lock.json yarn.lock .sisyphus .out .dist build tmp
+	@echo "Cleaned repository generated files."
+
