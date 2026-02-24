@@ -13,12 +13,12 @@
       "model": "custom/gpt-oss-120b",
       "reasoning": true,
       "reasoningEffort": "xhigh",
-      "textVerbosity": "high", // Added for more detailed logic
+      "textVerbosity": "high",
       "stream": false
     },
     "librarian": {
-      "model": "custom/mistral-small-24b",
-      "context": 114688,
+      "model": "custom/mistral-small-3-1-24b-instruct-2503",
+      "context": 128000,
       "tool_call": true,
       "stream": false
     },
@@ -26,27 +26,75 @@
       "model": "custom/llama-3-3-70b-instruct",
       "tool_call": true,
       "reasoning": true,
-      "permission": { "bash": "allow" }, // Optional: reduce prompts for the executor
+      "permission": {
+        "bash": "allow"
+      },
       "stream": false
     },
     "explore": {
-      "model": "custom/codestral-22b",
+      "model": "custom/llama-3-3-70b-instruct",
       "tool_call": true,
       "stream": false
     },
     "frontend_engineer": {
-      "model": "custom/pixtral-12b",
-      "context": 114688,
+      "model": "custom/pixtral-12b-2409",
+      "context": 128000,
       "tool_call": true,
       "stream": false
+    },
+    "hephaestus": {
+      "model": "custom/codestral-22b-v0-1"
+    },
+    "multimodal-looker": {
+      "model": "custom/pixtral-12b-2409"
+    },
+    "prometheus": {
+      "model": "custom/gpt-oss-120b"
+    },
+    "metis": {
+      "model": "custom/mistral-small-3-1-24b-instruct-2503"
+    },
+    "momus": {
+      "model": "custom/gpt-oss-20b"
+    },
+    "atlas": {
+      "model": "custom/llama-3-3-70b-instruct"
     }
   },
   "categories": {
-    "quick": { "model": "custom/llama-3-2-3b-instruct", "stream": false },
-    "visual-engineering": { "model": "custom/pixtral-12b", "stream": false },
-    "logic": { "model": "custom/gpt-oss-120b", "variant": "high", "stream": false }
+    "quick": {
+      "model": "custom/gpt-oss-20b",
+      "stream": false
+    },
+    "visual-engineering": {
+      "model": "custom/pixtral-12b-2409",
+      "stream": false
+    },
+    "logic": {
+      "model": "custom/gpt-oss-120b",
+      "variant": "high",
+      "stream": false
+    },
+    "ultrabrain": {
+      "model": "custom/gpt-oss-120b"
+    },
+    "deep": {
+      "model": "custom/gpt-oss-120b"
+    },
+    "artistry": {
+      "model": "custom/mistral-small-3-1-24b-instruct-2503"
+    },
+    "unspecified-low": {
+      "model": "custom/llama-3-2-3b-instruct"
+    },
+    "unspecified-high": {
+      "model": "custom/llama-3-3-70b-instruct"
+    },
+    "writing": {
+      "model": "custom/mistral-small-3-1-24b-instruct-2503"
+    }
   },
-  "browser_automation_engine": "custom/pixtral-12b",
+  "browser_automation_engine": "custom/pixtral-12b-2409",
   "tmux": {
     "enabled": true,
     "layout": "main-vertical",
