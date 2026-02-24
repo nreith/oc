@@ -9,6 +9,14 @@
       "maxTokens": 16384,
       "stream": false
     },
+    "hephaestus": {
+      "model": "custom/gpt-oss-120b",
+      "reasoning": true,
+      "tool_call": true,
+      "variant": "high",
+      "maxTokens": 16384,
+      "stream": false
+    },
     "oracle": {
       "model": "custom/gpt-oss-120b",
       "reasoning": true,
